@@ -3,115 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio Desktop</title>
+    <title>BRUTAL PORTFOLIO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo+Black&display=swap" rel="stylesheet">
     <style>
+        /* BRUTALIST RESET */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none;
+            font-family: 'Space Mono', monospace;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: none;
         }
 
         body {
+            background-color: #0a0a0a;
+            color: #ffffff;
             overflow: hidden;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             height: 100vh;
             width: 100vw;
             position: relative;
+            border: 12px solid #ff0a0a;
         }
 
-        /* Desktop Area */
+        /* DESKTOP GRID */
         .desktop {
             width: 100%;
-            height: calc(100% - 40px);
+            height: calc(100% - 60px);
             position: relative;
             overflow: hidden;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 19px,
+                    rgba(255, 10, 10, 0.03) 19px,
+                    rgba(255, 10, 10, 0.03) 20px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 19px,
+                    rgba(255, 10, 10, 0.03) 19px,
+                    rgba(255, 10, 10, 0.03) 20px
+                );
         }
 
-        /* Taskbar */
+        /* TASKBAR - BRUTAL STYLE */
         .taskbar {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 40px;
-            background-color: rgba(0, 0, 0, 0.8);
+            height: 60px;
+            background-color: #0a0a0a;
+            border-top: 6px solid #ff0a0a;
             display: flex;
             align-items: center;
-            padding: 0 10px;
+            padding: 0 15px;
             z-index: 1000;
+            gap: 10px;
         }
 
         .start-button {
-            height: 30px;
-            padding: 0 15px;
-            background: linear-gradient(to bottom, #4c7e35, #2d5a20);
-            color: white;
+            height: 45px;
+            padding: 0 20px;
+            background: #ff0a0a;
+            color: #0a0a0a;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 5px 5px 0px #ffffff;
+            transition: all 0.1s;
         }
 
         .start-button:hover {
-            background: linear-gradient(to bottom, #5a8f40, #3a6d28);
+            transform: translate(2px, 2px);
+            box-shadow: 3px 3px 0px #ffffff;
+        }
+
+        .start-button:active {
+            transform: translate(5px, 5px);
+            box-shadow: 0px 0px 0px #ffffff;
         }
 
         .taskbar-apps {
             display: flex;
-            margin-left: 10px;
             flex-grow: 1;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 5px 0;
         }
 
         .taskbar-app {
-            height: 30px;
+            height: 45px;
             padding: 0 15px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
-            border-radius: 4px;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            border: 2px solid #ffffff;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 5px;
-            font-size: 12px;
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 11px;
+            text-transform: uppercase;
             white-space: nowrap;
-        }
-
-        .taskbar-app:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            min-width: 120px;
         }
 
         .taskbar-app.active {
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: #ffffff;
+            color: #0a0a0a;
+        }
+
+        .system-tray {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: auto;
         }
 
         .clock {
-            color: white;
-            font-size: 12px;
-            margin-left: auto;
-            padding: 0 10px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 12px;
+            background: #0a0a0a;
+            border: 2px solid #ffffff;
         }
 
-        /* Start Menu */
+        /* DESKTOP ICONS - BRUTAL STYLE */
+        .desktop-icon {
+            position: absolute;
+            width: 90px;
+            height: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 8px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .desktop-icon:hover {
+            border: 2px solid #ff0a0a;
+            background: rgba(255, 10, 10, 0.05);
+        }
+
+        .desktop-icon.selected {
+            border: 2px solid #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .icon-image {
+            width: 54px;
+            height: 54px;
+            background-color: #ff0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a0a0a;
+            font-size: 24px;
+            margin-bottom: 8px;
+            border: 2px solid #ffffff;
+            box-shadow: 3px 3px 0px #ffffff;
+        }
+
+        .icon-label {
+            color: #ffffff;
+            font-size: 11px;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            line-height: 1.2;
+            max-width: 100%;
+            background: #0a0a0a;
+            padding: 2px 4px;
+        }
+
+        /* WINDOWS - BRUTAL STYLE */
+        .window {
+            position: absolute;
+            background-color: #0a0a0a;
+            border: 4px solid #ffffff;
+            box-shadow: 8px 8px 0px #ff0a0a;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 100;
+            min-width: 400px;
+            min-height: 300px;
+        }
+
+        .window.maximized {
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: calc(100% - 60px) !important;
+            border: 6px solid #ffffff;
+            box-shadow: none;
+        }
+
+        .window-header {
+            height: 40px;
+            background: #ff0a0a;
+            color: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            cursor: move;
+            flex-shrink: 0;
+            border-bottom: 3px solid #ffffff;
+        }
+
+        .window-title {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .window-control {
+            width: 22px;
+            height: 22px;
+            background: #0a0a0a;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .window-control:hover {
+            background: #ffffff;
+            color: #0a0a0a;
+        }
+
+        .window-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow: auto;
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+
+        .project-media {
+            width: 100%;
+            margin-bottom: 20px;
+            border: 3px solid #ffffff;
+        }
+
+        .project-media img, .project-media video {
+            width: 100%;
+            display: block;
+        }
+
+        .project-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            color: #ff0a0a;
+            border-bottom: 2px solid #ffffff;
+            padding-bottom: 5px;
+        }
+
+        .project-description {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .project-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #ff0a0a;
+            color: #0a0a0a;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: 2px solid #ffffff;
+            box-shadow: 3px 3px 0px #ffffff;
+            transition: all 0.1s;
+        }
+
+        .project-link:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #ffffff;
+        }
+
+        /* START MENU - BRUTAL STYLE */
         .start-menu {
             position: fixed;
-            bottom: 40px;
+            bottom: 60px;
             left: 0;
-            width: 300px;
-            height: 400px;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 8px 8px 0 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            width: 320px;
+            height: 450px;
+            background-color: #0a0a0a;
+            border: 4px solid #ffffff;
+            border-bottom: none;
+            box-shadow: 8px -8px 0px #ff0a0a;
             display: none;
             flex-direction: column;
             z-index: 1001;
@@ -119,254 +329,198 @@
         }
 
         .start-menu-header {
-            height: 100px;
-            background: linear-gradient(to right, #1a2a6c, #b21f1f);
-            color: white;
+            height: 80px;
+            background: #ff0a0a;
+            color: #0a0a0a;
             display: flex;
             align-items: center;
             padding: 0 20px;
-            font-size: 18px;
+            font-size: 24px;
             font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 3px solid #ffffff;
         }
 
         .start-menu-items {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 10px 0;
+            padding: 15px 0;
         }
 
         .start-menu-item {
-            padding: 10px 20px;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
             cursor: pointer;
             transition: background-color 0.2s;
+            border-bottom: 1px solid #333;
         }
 
         .start-menu-item:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: #ff0a0a;
+            color: #0a0a0a;
         }
 
         .start-menu-item-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-            background-color: #1a2a6c;
-            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            margin-right: 15px;
+            background-color: #ff0a0a;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 12px;
-        }
-
-        /* Desktop Icons */
-        .desktop-icon {
-            position: absolute;
-            width: 80px;
-            height: 90px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 5px;
-            transition: background-color 0.2s;
-            z-index: 10;
-        }
-
-        .desktop-icon:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .desktop-icon.selected {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .icon-image {
-            width: 48px;
-            height: 48px;
-            background-color: #1a2a6c;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .icon-label {
-            color: white;
-            font-size: 12px;
-            text-align: center;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-            word-break: break-word;
-            max-width: 100%;
-        }
-
-        /* Windows */
-        .window {
-            position: absolute;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 100;
-            min-width: 300px;
-            min-height: 200px;
-        }
-
-        .window.maximized {
-            top: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            height: calc(100% - 40px) !important;
-        }
-
-        .window-header {
-            height: 30px;
-            background: linear-gradient(to right, #1a2a6c, #b21f1f);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 10px;
-            cursor: move;
-            flex-shrink: 0;
-        }
-
-        .window-title {
+            color: #0a0a0a;
             font-size: 14px;
-            font-weight: bold;
+            border: 2px solid #ffffff;
         }
 
-        .window-controls {
-            display: flex;
-        }
-
-        .window-control {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            margin-left: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .minimize {
-            background-color: #f0ad4e;
-        }
-
-        .maximize {
-            background-color: #5cb85c;
-        }
-
-        .close {
-            background-color: #d9534f;
-        }
-
-        .window-content {
-            flex-grow: 1;
-            padding: 15px;
-            overflow: auto;
-            background-color: #f8f9fa;
-        }
-
-        .window-content img, .window-content video {
-            max-width: 100%;
-            display: block;
-            margin: 0 auto 10px;
-        }
-
-        .window-content p {
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        .window-content a {
-            color: #1a2a6c;
-            text-decoration: none;
-        }
-
-        .window-content a:hover {
-            text-decoration: underline;
-        }
-
-        /* Resize handle */
+        /* RESIZE HANDLE */
         .resize-handle {
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 20px;
+            height: 20px;
             bottom: 0;
             right: 0;
             cursor: nwse-resize;
             z-index: 101;
+            background: #ff0a0a;
+            border-left: 2px solid #ffffff;
+            border-top: 2px solid #ffffff;
         }
 
-        /* Context Menu */
+        /* CONTEXT MENU */
         .context-menu {
             position: absolute;
-            background-color: white;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            background-color: #0a0a0a;
+            border: 3px solid #ffffff;
+            box-shadow: 5px 5px 0px #ff0a0a;
             padding: 5px 0;
             z-index: 1002;
             display: none;
         }
 
         .context-menu-item {
-            padding: 8px 15px;
+            padding: 10px 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
+            text-transform: uppercase;
+            transition: background-color 0.2s;
         }
 
         .context-menu-item:hover {
-            background-color: #f0f0f0;
+            background-color: #ff0a0a;
+            color: #0a0a0a;
         }
 
-        /* Responsive adjustments */
+        /* SYSTEM NOTIFICATION */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #0a0a0a;
+            color: #ffffff;
+            border: 3px solid #ff0a0a;
+            box-shadow: 5px 5px 0px #ffffff;
+            z-index: 2000;
+            display: none;
+        }
+
+        /* BRUTALIST DECORATIVE ELEMENTS */
+        .corner-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            z-index: 1;
+        }
+
+        .corner-tl {
+            top: 0;
+            left: 0;
+            border-right: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-top: 12px solid #ff0a0a;
+            border-left: 12px solid #ff0a0a;
+        }
+
+        .corner-tr {
+            top: 0;
+            right: 0;
+            border-left: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-top: 12px solid #ff0a0a;
+            border-right: 12px solid #ff0a0a;
+        }
+
+        .corner-bl {
+            bottom: 60px;
+            left: 0;
+            border-right: 12px solid transparent;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid #ff0a0a;
+            border-left: 12px solid #ff0a0a;
+        }
+
+        .corner-br {
+            bottom: 60px;
+            right: 0;
+            border-left: 12px solid transparent;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid #ff0a0a;
+            border-right: 12px solid #ff0a0a;
+        }
+
+        /* RESPONSIVE ADJUSTMENTS */
         @media (max-width: 768px) {
+            body {
+                border-width: 8px;
+            }
+            
             .desktop-icon {
-                width: 70px;
-                height: 80px;
+                width: 80px;
+                height: 100px;
             }
             
             .icon-image {
-                width: 40px;
-                height: 40px;
+                width: 48px;
+                height: 48px;
                 font-size: 20px;
             }
             
             .window {
-                min-width: 250px;
-                min-height: 150px;
+                min-width: 300px;
+                min-height: 250px;
+            }
+            
+            .start-menu {
+                width: 280px;
+                height: 400px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="corner-decoration corner-tl"></div>
+    <div class="corner-decoration corner-tr"></div>
+    <div class="corner-decoration corner-bl"></div>
+    <div class="corner-decoration corner-br"></div>
+
     <div class="desktop" id="desktop">
         <!-- Desktop icons will be generated here -->
     </div>
 
     <div class="taskbar">
-        <button class="start-button" id="startButton">Start</button>
+        <button class="start-button" id="startButton">SYSTEM</button>
         <div class="taskbar-apps" id="taskbarApps">
             <!-- Taskbar apps will be generated here -->
         </div>
-        <div class="clock" id="clock">00:00:00</div>
+        <div class="system-tray">
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
     </div>
 
     <div class="start-menu" id="startMenu">
-        <div class="start-menu-header">My Portfolio</div>
+        <div class="start-menu-header">PORTFOLIO OS</div>
         <div class="start-menu-items" id="startMenuItems">
             <!-- Start menu items will be generated here -->
         </div>
@@ -374,53 +528,66 @@
 
     <!-- Context Menu -->
     <div class="context-menu" id="contextMenu">
-        <div class="context-menu-item" id="openContext">Open</div>
-        <div class="context-menu-item" id="renameContext">Rename</div>
-        <div class="context-menu-item" id="deleteContext">Delete</div>
+        <div class="context-menu-item" id="openContext">EXECUTE</div>
+        <div class="context-menu-item" id="renameContext">RENAME</div>
+        <div class="context-menu-item" id="deleteContext">DELETE</div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        SYSTEM: Portfolio OS Initialized
     </div>
 
     <script>
-        // Project data - easily customizable
+        // BRUTALIST PROJECT DATA
         const projects = [
             {
                 id: 1,
-                title: "Web Design Project",
-                icon: "🌐",
+                title: "BRUTAL ARCHITECTURE",
+                icon: "🏢",
                 type: "image",
-                source: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-                description: "A modern website design with responsive layout and interactive elements. This project showcases my skills in UI/UX design and front-end development."
+                source: "https://images.unsplash.com/photo-1518002171953-f00013e10f4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                description: "Raw concrete structures exploring the intersection of form and function. This series examines the beauty in brutalist architectural principles applied to digital spaces."
             },
             {
                 id: 2,
-                title: "Mobile App UI",
-                icon: "📱",
+                title: "TYPOGRAPHY SYSTEM",
+                icon: "🔤",
                 type: "image",
-                source: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-                description: "User interface design for a mobile application focused on productivity. Features intuitive navigation and clean visual hierarchy."
+                source: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                description: "A modular typographic system built on geometric principles. Each character is constructed from basic shapes to maintain visual consistency across scales."
             },
             {
                 id: 3,
-                title: "Brand Identity",
-                icon: "🎨",
-                type: "image",
-                source: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1300&q=80",
-                description: "Complete brand identity package including logo, color palette, typography, and brand guidelines for a tech startup."
+                title: "DIGITAL SCULPTURE",
+                icon: "⚙️",
+                type: "video",
+                source: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                description: "Algorithmic generation of three-dimensional forms using parametric design principles. Each iteration explores the relationship between mathematical rules and aesthetic outcomes."
             },
             {
                 id: 4,
-                title: "Animation Demo",
-                icon: "🎬",
-                type: "video",
-                source: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                description: "A short animation showcasing character design and motion graphics. Created using After Effects and Lottie for web integration."
+                title: "INTERFACE STUDIES",
+                icon: "💠",
+                type: "image",
+                source: "https://images.unsplash.com/photo-1558655146-364adaf1fcc9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                description: "A collection of user interface experiments that challenge conventional interaction patterns. Each study prioritizes function over decorative elements."
             },
             {
                 id: 5,
-                title: "My GitHub",
-                icon: "💻",
+                title: "CODE REPOSITORY",
+                icon: "📟",
                 type: "link",
                 source: "https://github.com",
-                description: "Check out my GitHub profile to see more of my coding projects and contributions to open source."
+                description: "Access to the underlying code structures and experimental frameworks. All projects are documented with technical specifications and development notes."
+            },
+            {
+                id: 6,
+                title: "SOUND EXPERIMENTS",
+                icon: "🔊",
+                type: "video",
+                source: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                description: "Generative audio compositions created through algorithmic processes. Each piece explores the relationship between visual patterns and sonic structures."
             }
         ];
 
@@ -432,6 +599,7 @@
         const taskbarApps = document.getElementById('taskbarApps');
         const clock = document.getElementById('clock');
         const contextMenu = document.getElementById('contextMenu');
+        const notification = document.getElementById('notification');
 
         // State variables
         let activeWindow = null;
@@ -447,6 +615,7 @@
             createDesktopIcons();
             updateClock();
             setInterval(updateClock, 1000);
+            showNotification('SYSTEM: Portfolio OS Initialized');
 
             // Event listeners
             document.addEventListener('mousedown', handleMouseDown);
@@ -460,7 +629,7 @@
             startButton.addEventListener('click', toggleStartMenu);
             document.addEventListener('click', closeStartMenu);
             
-            // Prevent context menu on right-click for desktop
+            // Context menu
             desktop.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
                 showContextMenu(e.pageX, e.pageY);
@@ -477,9 +646,18 @@
             });
         }
 
+        // Show system notification
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
         // Load desktop state from localStorage
         function loadDesktopState() {
-            const savedState = localStorage.getItem('desktopState');
+            const savedState = localStorage.getItem('brutalDesktopState');
             if (savedState) {
                 return JSON.parse(savedState);
             }
@@ -501,10 +679,9 @@
             
             const state = {
                 icons: iconPositions,
-                // Add window states if needed in the future
             };
             
-            localStorage.setItem('desktopState', JSON.stringify(state));
+            localStorage.setItem('brutalDesktopState', JSON.stringify(state));
         }
 
         // Create desktop icons
@@ -523,14 +700,18 @@
                         icon.style.left = `${savedIcon.x}px`;
                         icon.style.top = `${savedIcon.y}px`;
                     } else {
-                        // Random position for new icons
-                        icon.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
-                        icon.style.top = `${Math.random() * (window.innerHeight - 140)}px`;
+                        // Grid position for new icons
+                        const col = (project.id - 1) % 4;
+                        const row = Math.floor((project.id - 1) / 4);
+                        icon.style.left = `${100 + col * 120}px`;
+                        icon.style.top = `${80 + row * 140}px`;
                     }
                 } else {
-                    // Random position for first time
-                    icon.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
-                    icon.style.top = `${Math.random() * (window.innerHeight - 140)}px`;
+                    // Grid position for first time
+                    const col = (project.id - 1) % 4;
+                    const row = Math.floor((project.id - 1) / 4);
+                    icon.style.left = `${100 + col * 120}px`;
+                    icon.style.top = `${80 + row * 140}px`;
                 }
                 
                 icon.innerHTML = `
@@ -540,6 +721,8 @@
                 
                 // Double click to open project
                 icon.addEventListener('dblclick', () => openProject(project));
+                icon.addEventListener('mousedown', startDragIcon);
+                icon.addEventListener('touchstart', startDragIcon);
                 
                 // Add to start menu
                 const startMenuItem = document.createElement('div');
@@ -573,31 +756,24 @@
             window.dataset.projectId = project.id;
             
             // Set initial position and size
-            window.style.left = '100px';
-            window.style.top = '100px';
-            window.style.width = '600px';
+            window.style.left = '150px';
+            window.style.top = '80px';
+            window.style.width = '700px';
             window.style.height = '500px';
             
             // Window content based on project type
-            let content = '';
+            let mediaContent = '';
             if (project.type === 'image') {
-                content = `
-                    <img src="${project.source}" alt="${project.title}">
-                    <p>${project.description}</p>
-                `;
+                mediaContent = `<img src="${project.source}" alt="${project.title}">`;
             } else if (project.type === 'video') {
-                content = `
+                mediaContent = `
                     <video controls>
                         <source src="${project.source}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
-                    <p>${project.description}</p>
                 `;
             } else if (project.type === 'link') {
-                content = `
-                    <p>${project.description}</p>
-                    <p><a href="${project.source}" target="_blank">Open Link</a></p>
-                `;
+                mediaContent = `<div style="height: 300px; background: #ff0a0a; display: flex; align-items: center; justify-content: center; color: #0a0a0a; font-weight: bold; font-size: 24px;">EXTERNAL RESOURCE</div>`;
             }
             
             window.innerHTML = `
@@ -610,7 +786,12 @@
                     </div>
                 </div>
                 <div class="window-content">
-                    ${content}
+                    <div class="project-media">
+                        ${mediaContent}
+                    </div>
+                    <div class="project-title">${project.title}</div>
+                    <div class="project-description">${project.description}</div>
+                    ${project.type === 'link' ? `<a href="${project.source}" target="_blank" class="project-link">ACCESS RESOURCE</a>` : ''}
                 </div>
                 <div class="resize-handle"></div>
             `;
@@ -639,6 +820,8 @@
             // Make window resizable
             resizeHandle.addEventListener('mousedown', startResize);
             resizeHandle.addEventListener('touchstart', startResizeTouch);
+            
+            showNotification(`SYSTEM: ${project.title} loaded`);
         }
 
         // Add window to taskbar
@@ -649,7 +832,7 @@
             taskbarApp.dataset.windowId = project.id;
             
             taskbarApp.addEventListener('click', () => {
-                if (window.classList.contains('minimized')) {
+                if (window.style.display === 'none') {
                     restoreWindow(window);
                 } else {
                     bringToFront(window);
@@ -678,29 +861,32 @@
 
         // Minimize window
         function minimizeWindow(window) {
-            window.classList.add('minimized');
             window.style.display = 'none';
+            showNotification(`SYSTEM: ${window.querySelector('.window-title').textContent} minimized`);
         }
 
         // Restore window
         function restoreWindow(window) {
-            window.classList.remove('minimized');
             window.style.display = 'flex';
             bringToFront(window);
+            showNotification(`SYSTEM: ${window.querySelector('.window-title').textContent} restored`);
         }
 
         // Toggle maximize/restore window
         function toggleMaximize(window) {
             if (window.classList.contains('maximized')) {
                 window.classList.remove('maximized');
+                showNotification(`SYSTEM: Window restored`);
             } else {
                 window.classList.add('maximized');
+                showNotification(`SYSTEM: Window maximized`);
             }
         }
 
         // Close window
         function closeWindow(window) {
             const projectId = window.dataset.projectId;
+            const title = window.querySelector('.window-title').textContent;
             
             // Remove from taskbar
             const taskbarApp = document.querySelector(`[data-window-id="${projectId}"]`);
@@ -710,6 +896,7 @@
             
             // Remove window
             window.remove();
+            showNotification(`SYSTEM: ${title} closed`);
         }
 
         // Start dragging window or icon
@@ -774,8 +961,8 @@
                 if (x + draggedElement.offsetWidth > window.innerWidth) {
                     x = window.innerWidth - draggedElement.offsetWidth;
                 }
-                if (y + draggedElement.offsetHeight > window.innerHeight - 40) {
-                    y = window.innerHeight - draggedElement.offsetHeight - 40;
+                if (y + draggedElement.offsetHeight > window.innerHeight - 60) {
+                    y = window.innerHeight - draggedElement.offsetHeight - 60;
                 }
                 
                 draggedElement.style.left = `${x}px`;
@@ -807,8 +994,8 @@
                 if (x + draggedElement.offsetWidth > window.innerWidth) {
                     x = window.innerWidth - draggedElement.offsetWidth;
                 }
-                if (y + draggedElement.offsetHeight > window.innerHeight - 40) {
-                    y = window.innerHeight - draggedElement.offsetHeight - 40;
+                if (y + draggedElement.offsetHeight > window.innerHeight - 60) {
+                    y = window.innerHeight - draggedElement.offsetHeight - 60;
                 }
                 
                 draggedElement.style.left = `${x}px`;
