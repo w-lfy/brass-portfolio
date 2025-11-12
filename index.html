@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio Desktop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        /* Desktop Area */
+        .desktop {
+            width: 100%;
+            height: calc(100% - 40px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            z-index: 1000;
+        }
+
+        .start-button {
+            height: 30px;
+            padding: 0 15px;
+            background: linear-gradient(to bottom, #4c7e35, #2d5a20);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-button:hover {
+            background: linear-gradient(to bottom, #5a8f40, #3a6d28);
+        }
+
+        .taskbar-apps {
+            display: flex;
+            margin-left: 10px;
+            flex-grow: 1;
+        }
+
+        .taskbar-app {
+            height: 30px;
+            padding: 0 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5px;
+            font-size: 12px;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .taskbar-app:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .taskbar-app.active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .clock {
+            color: white;
+            font-size: 12px;
+            margin-left: auto;
+            padding: 0 10px;
+        }
+
+        /* Start Menu */
+        .start-menu {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            width: 300px;
+            height: 400px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .start-menu-header {
+            height: 100px;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .start-menu-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .start-menu-item {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .start-menu-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .start-menu-item-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background-color: #1a2a6c;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Desktop Icons */
+        .desktop-icon {
+            position: absolute;
+            width: 80px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+            z-index: 10;
+        }
+
+        .desktop-icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .desktop-icon.selected {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .icon-image {
+            width: 48px;
+            height: 48px;
+            background-color: #1a2a6c;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .icon-label {
+            color: white;
+            font-size: 12px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            word-break: break-word;
+            max-width: 100%;
+        }
+
+        /* Windows */
+        .window {
+            position: absolute;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 100;
+            min-width: 300px;
+            min-height: 200px;
+        }
+
+        .window.maximized {
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: calc(100% - 40px) !important;
+        }
+
+        .window-header {
+            height: 30px;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            cursor: move;
+            flex-shrink: 0;
+        }
+
+        .window-title {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .window-controls {
+            display: flex;
+        }
+
+        .window-control {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .minimize {
+            background-color: #f0ad4e;
+        }
+
+        .maximize {
+            background-color: #5cb85c;
+        }
+
+        .close {
+            background-color: #d9534f;
+        }
+
+        .window-content {
+            flex-grow: 1;
+            padding: 15px;
+            overflow: auto;
+            background-color: #f8f9fa;
+        }
+
+        .window-content img, .window-content video {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        .window-content p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .window-content a {
+            color: #1a2a6c;
+            text-decoration: none;
+        }
+
+        .window-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Resize handle */
+        .resize-handle {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            bottom: 0;
+            right: 0;
+            cursor: nwse-resize;
+            z-index: 101;
+        }
+
+        /* Context Menu */
+        .context-menu {
+            position: absolute;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 5px 0;
+            z-index: 1002;
+            display: none;
+        }
+
+        .context-menu-item {
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .context-menu-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .desktop-icon {
+                width: 70px;
+                height: 80px;
+            }
+            
+            .icon-image {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .window {
+                min-width: 250px;
+                min-height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop" id="desktop">
+        <!-- Desktop icons will be generated here -->
+    </div>
+
+    <div class="taskbar">
+        <button class="start-button" id="startButton">Start</button>
+        <div class="taskbar-apps" id="taskbarApps">
+            <!-- Taskbar apps will be generated here -->
+        </div>
+        <div class="clock" id="clock">00:00:00</div>
+    </div>
+
+    <div class="start-menu" id="startMenu">
+        <div class="start-menu-header">My Portfolio</div>
+        <div class="start-menu-items" id="startMenuItems">
+            <!-- Start menu items will be generated here -->
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" id="openContext">Open</div>
+        <div class="context-menu-item" id="renameContext">Rename</div>
+        <div class="context-menu-item" id="deleteContext">Delete</div>
+    </div>
+
+    <script>
+        // Project data - easily customizable
+        const projects = [
+            {
+                id: 1,
+                title: "Web Design Project",
+                icon: "🌐",
+                type: "image",
+                source: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                description: "A modern website design with responsive layout and interactive elements. This project showcases my skills in UI/UX design and front-end development."
+            },
+            {
+                id: 2,
+                title: "Mobile App UI",
+                icon: "📱",
+                type: "image",
+                source: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                description: "User interface design for a mobile application focused on productivity. Features intuitive navigation and clean visual hierarchy."
+            },
+            {
+                id: 3,
+                title: "Brand Identity",
+                icon: "🎨",
+                type: "image",
+                source: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1300&q=80",
+                description: "Complete brand identity package including logo, color palette, typography, and brand guidelines for a tech startup."
+            },
+            {
+                id: 4,
+                title: "Animation Demo",
+                icon: "🎬",
+                type: "video",
+                source: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                description: "A short animation showcasing character design and motion graphics. Created using After Effects and Lottie for web integration."
+            },
+            {
+                id: 5,
+                title: "My GitHub",
+                icon: "💻",
+                type: "link",
+                source: "https://github.com",
+                description: "Check out my GitHub profile to see more of my coding projects and contributions to open source."
+            }
+        ];
+
+        // DOM Elements
+        const desktop = document.getElementById('desktop');
+        const startButton = document.getElementById('startButton');
+        const startMenu = document.getElementById('startMenu');
+        const startMenuItems = document.getElementById('startMenuItems');
+        const taskbarApps = document.getElementById('taskbarApps');
+        const clock = document.getElementById('clock');
+        const contextMenu = document.getElementById('contextMenu');
+
+        // State variables
+        let activeWindow = null;
+        let zIndexCounter = 100;
+        let draggedElement = null;
+        let offsetX = 0, offsetY = 0;
+        let isResizing = false;
+        let resizeElement = null;
+
+        // Initialize the desktop
+        function initDesktop() {
+            loadDesktopState();
+            createDesktopIcons();
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // Event listeners
+            document.addEventListener('mousedown', handleMouseDown);
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            
+            document.addEventListener('touchstart', handleTouchStart, { passive: false });
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd);
+            
+            startButton.addEventListener('click', toggleStartMenu);
+            document.addEventListener('click', closeStartMenu);
+            
+            // Prevent context menu on right-click for desktop
+            desktop.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                showContextMenu(e.pageX, e.pageY);
+            });
+            
+            // Context menu actions
+            document.getElementById('openContext').addEventListener('click', openFromContextMenu);
+            document.getElementById('renameContext').addEventListener('click', renameFromContextMenu);
+            document.getElementById('deleteContext').addEventListener('click', deleteFromContextMenu);
+            
+            // Close context menu on click elsewhere
+            document.addEventListener('click', () => {
+                contextMenu.style.display = 'none';
+            });
+        }
+
+        // Load desktop state from localStorage
+        function loadDesktopState() {
+            const savedState = localStorage.getItem('desktopState');
+            if (savedState) {
+                return JSON.parse(savedState);
+            }
+            return null;
+        }
+
+        // Save desktop state to localStorage
+        function saveDesktopState() {
+            const icons = document.querySelectorAll('.desktop-icon');
+            const iconPositions = [];
+            
+            icons.forEach(icon => {
+                iconPositions.push({
+                    id: icon.dataset.id,
+                    x: parseInt(icon.style.left),
+                    y: parseInt(icon.style.top)
+                });
+            });
+            
+            const state = {
+                icons: iconPositions,
+                // Add window states if needed in the future
+            };
+            
+            localStorage.setItem('desktopState', JSON.stringify(state));
+        }
+
+        // Create desktop icons
+        function createDesktopIcons() {
+            const savedState = loadDesktopState();
+            
+            projects.forEach(project => {
+                const icon = document.createElement('div');
+                icon.className = 'desktop-icon';
+                icon.dataset.id = project.id;
+                
+                // Set position from saved state or default
+                if (savedState && savedState.icons) {
+                    const savedIcon = savedState.icons.find(i => i.id == project.id);
+                    if (savedIcon) {
+                        icon.style.left = `${savedIcon.x}px`;
+                        icon.style.top = `${savedIcon.y}px`;
+                    } else {
+                        // Random position for new icons
+                        icon.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
+                        icon.style.top = `${Math.random() * (window.innerHeight - 140)}px`;
+                    }
+                } else {
+                    // Random position for first time
+                    icon.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
+                    icon.style.top = `${Math.random() * (window.innerHeight - 140)}px`;
+                }
+                
+                icon.innerHTML = `
+                    <div class="icon-image">${project.icon}</div>
+                    <div class="icon-label">${project.title}</div>
+                `;
+                
+                // Double click to open project
+                icon.addEventListener('dblclick', () => openProject(project));
+                
+                // Add to start menu
+                const startMenuItem = document.createElement('div');
+                startMenuItem.className = 'start-menu-item';
+                startMenuItem.innerHTML = `
+                    <div class="start-menu-item-icon">${project.icon}</div>
+                    <div>${project.title}</div>
+                `;
+                startMenuItem.addEventListener('click', () => {
+                    openProject(project);
+                    closeStartMenu();
+                });
+                startMenuItems.appendChild(startMenuItem);
+                
+                desktop.appendChild(icon);
+            });
+        }
+
+        // Open a project in a window
+        function openProject(project) {
+            // Close existing window if already open
+            const existingWindow = document.querySelector(`[data-project-id="${project.id}"]`);
+            if (existingWindow) {
+                bringToFront(existingWindow);
+                return;
+            }
+            
+            // Create window
+            const window = document.createElement('div');
+            window.className = 'window';
+            window.dataset.projectId = project.id;
+            
+            // Set initial position and size
+            window.style.left = '100px';
+            window.style.top = '100px';
+            window.style.width = '600px';
+            window.style.height = '500px';
+            
+            // Window content based on project type
+            let content = '';
+            if (project.type === 'image') {
+                content = `
+                    <img src="${project.source}" alt="${project.title}">
+                    <p>${project.description}</p>
+                `;
+            } else if (project.type === 'video') {
+                content = `
+                    <video controls>
+                        <source src="${project.source}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>${project.description}</p>
+                `;
+            } else if (project.type === 'link') {
+                content = `
+                    <p>${project.description}</p>
+                    <p><a href="${project.source}" target="_blank">Open Link</a></p>
+                `;
+            }
+            
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">${project.title}</div>
+                    <div class="window-controls">
+                        <div class="window-control minimize">−</div>
+                        <div class="window-control maximize">□</div>
+                        <div class="window-control close">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    ${content}
+                </div>
+                <div class="resize-handle"></div>
+            `;
+            
+            desktop.appendChild(window);
+            bringToFront(window);
+            
+            // Add to taskbar
+            addToTaskbar(project, window);
+            
+            // Window controls
+            const minimizeBtn = window.querySelector('.minimize');
+            const maximizeBtn = window.querySelector('.maximize');
+            const closeBtn = window.querySelector('.close');
+            const resizeHandle = window.querySelector('.resize-handle');
+            
+            minimizeBtn.addEventListener('click', () => minimizeWindow(window));
+            maximizeBtn.addEventListener('click', () => toggleMaximize(window));
+            closeBtn.addEventListener('click', () => closeWindow(window));
+            
+            // Make window draggable
+            const header = window.querySelector('.window-header');
+            header.addEventListener('mousedown', startDrag);
+            header.addEventListener('touchstart', startDragTouch);
+            
+            // Make window resizable
+            resizeHandle.addEventListener('mousedown', startResize);
+            resizeHandle.addEventListener('touchstart', startResizeTouch);
+        }
+
+        // Add window to taskbar
+        function addToTaskbar(project, window) {
+            const taskbarApp = document.createElement('div');
+            taskbarApp.className = 'taskbar-app';
+            taskbarApp.textContent = project.title;
+            taskbarApp.dataset.windowId = project.id;
+            
+            taskbarApp.addEventListener('click', () => {
+                if (window.classList.contains('minimized')) {
+                    restoreWindow(window);
+                } else {
+                    bringToFront(window);
+                }
+            });
+            
+            taskbarApps.appendChild(taskbarApp);
+        }
+
+        // Bring window to front
+        function bringToFront(window) {
+            zIndexCounter++;
+            window.style.zIndex = zIndexCounter;
+            activeWindow = window;
+            
+            // Update taskbar active state
+            document.querySelectorAll('.taskbar-app').forEach(app => {
+                app.classList.remove('active');
+            });
+            
+            const taskbarApp = document.querySelector(`[data-window-id="${window.dataset.projectId}"]`);
+            if (taskbarApp) {
+                taskbarApp.classList.add('active');
+            }
+        }
+
+        // Minimize window
+        function minimizeWindow(window) {
+            window.classList.add('minimized');
+            window.style.display = 'none';
+        }
+
+        // Restore window
+        function restoreWindow(window) {
+            window.classList.remove('minimized');
+            window.style.display = 'flex';
+            bringToFront(window);
+        }
+
+        // Toggle maximize/restore window
+        function toggleMaximize(window) {
+            if (window.classList.contains('maximized')) {
+                window.classList.remove('maximized');
+            } else {
+                window.classList.add('maximized');
+            }
+        }
+
+        // Close window
+        function closeWindow(window) {
+            const projectId = window.dataset.projectId;
+            
+            // Remove from taskbar
+            const taskbarApp = document.querySelector(`[data-window-id="${projectId}"]`);
+            if (taskbarApp) {
+                taskbarApp.remove();
+            }
+            
+            // Remove window
+            window.remove();
+        }
+
+        // Start dragging window or icon
+        function startDrag(e) {
+            if (e.button !== 0 && e.type !== 'touchstart') return;
+            
+            draggedElement = e.target.closest('.window');
+            if (!draggedElement) return;
+            
+            bringToFront(draggedElement);
+            
+            const rect = draggedElement.getBoundingClientRect();
+            if (e.type === 'mousedown') {
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+            } else {
+                offsetX = e.touches[0].clientX - rect.left;
+                offsetY = e.touches[0].clientY - rect.top;
+            }
+            
+            e.preventDefault();
+        }
+
+        // Start dragging for desktop icons
+        function startDragIcon(e) {
+            if (e.button !== 0 && e.type !== 'touchstart') return;
+            
+            draggedElement = e.target.closest('.desktop-icon');
+            if (!draggedElement) return;
+            
+            const rect = draggedElement.getBoundingClientRect();
+            if (e.type === 'mousedown') {
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+            } else {
+                offsetX = e.touches[0].clientX - rect.left;
+                offsetY = e.touches[0].clientY - rect.top;
+            }
+            
+            e.preventDefault();
+        }
+
+        // Handle mouse movement for dragging
+        function handleMouseMove(e) {
+            if (!draggedElement) return;
+            
+            if (isResizing) {
+                // Resize logic
+                const newWidth = e.clientX - parseInt(draggedElement.style.left);
+                const newHeight = e.clientY - parseInt(draggedElement.style.top);
+                
+                if (newWidth > 300) draggedElement.style.width = `${newWidth}px`;
+                if (newHeight > 200) draggedElement.style.height = `${newHeight}px`;
+            } else {
+                // Dragging logic
+                let x = e.clientX - offsetX;
+                let y = e.clientY - offsetY;
+                
+                // Boundary checks
+                if (x < 0) x = 0;
+                if (y < 0) y = 0;
+                if (x + draggedElement.offsetWidth > window.innerWidth) {
+                    x = window.innerWidth - draggedElement.offsetWidth;
+                }
+                if (y + draggedElement.offsetHeight > window.innerHeight - 40) {
+                    y = window.innerHeight - draggedElement.offsetHeight - 40;
+                }
+                
+                draggedElement.style.left = `${x}px`;
+                draggedElement.style.top = `${y}px`;
+            }
+        }
+
+        // Handle touch movement for dragging
+        function handleTouchMove(e) {
+            if (!draggedElement || e.touches.length !== 1) return;
+            
+            const touch = e.touches[0];
+            
+            if (isResizing) {
+                // Resize logic
+                const newWidth = touch.clientX - parseInt(draggedElement.style.left);
+                const newHeight = touch.clientY - parseInt(draggedElement.style.top);
+                
+                if (newWidth > 300) draggedElement.style.width = `${newWidth}px`;
+                if (newHeight > 200) draggedElement.style.height = `${newHeight}px`;
+            } else {
+                // Dragging logic
+                let x = touch.clientX - offsetX;
+                let y = touch.clientY - offsetY;
+                
+                // Boundary checks
+                if (x < 0) x = 0;
+                if (y < 0) y = 0;
+                if (x + draggedElement.offsetWidth > window.innerWidth) {
+                    x = window.innerWidth - draggedElement.offsetWidth;
+                }
+                if (y + draggedElement.offsetHeight > window.innerHeight - 40) {
+                    y = window.innerHeight - draggedElement.offsetHeight - 40;
+                }
+                
+                draggedElement.style.left = `${x}px`;
+                draggedElement.style.top = `${y}px`;
+            }
+            
+            e.preventDefault();
+        }
+
+        // Stop dragging
+        function handleMouseUp() {
+            if (draggedElement && draggedElement.classList.contains('desktop-icon')) {
+                saveDesktopState();
+            }
+            draggedElement = null;
+            isResizing = false;
+            resizeElement = null;
+        }
+
+        // Stop dragging for touch
+        function handleTouchEnd() {
+            if (draggedElement && draggedElement.classList.contains('desktop-icon')) {
+                saveDesktopState();
+            }
+            draggedElement = null;
+            isResizing = false;
+            resizeElement = null;
+        }
+
+        // Start resize
+        function startResize(e) {
+            if (e.button !== 0) return;
+            
+            isResizing = true;
+            resizeElement = e.target.closest('.window');
+            bringToFront(resizeElement);
+            
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Start resize for touch
+        function startResizeTouch(e) {
+            isResizing = true;
+            resizeElement = e.target.closest('.window');
+            bringToFront(resizeElement);
+            
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Handle mouse down for desktop icons and windows
+        function handleMouseDown(e) {
+            // Check if clicking on desktop icon
+            if (e.target.closest('.desktop-icon')) {
+                startDragIcon(e);
+            }
+            
+            // Check if clicking on window header
+            if (e.target.closest('.window-header')) {
+                startDrag(e);
+            }
+            
+            // Check if clicking on resize handle
+            if (e.target.closest('.resize-handle')) {
+                startResize(e);
+            }
+            
+            // Deselect all icons when clicking on desktop
+            if (e.target === desktop) {
+                document.querySelectorAll('.desktop-icon').forEach(icon => {
+                    icon.classList.remove('selected');
+                });
+            }
+        }
+
+        // Handle touch start for desktop icons and windows
+        function handleTouchStart(e) {
+            // Check if touching desktop icon
+            if (e.target.closest('.desktop-icon')) {
+                startDragIcon(e);
+            }
+            
+            // Check if touching window header
+            if (e.target.closest('.window-header')) {
+                startDrag(e);
+            }
+            
+            // Check if touching resize handle
+            if (e.target.closest('.resize-handle')) {
+                startResizeTouch(e);
+            }
+            
+            // Deselect all icons when touching desktop
+            if (e.target === desktop) {
+                document.querySelectorAll('.desktop-icon').forEach(icon => {
+                    icon.classList.remove('selected');
+                });
+            }
+        }
+
+        // Toggle start menu
+        function toggleStartMenu() {
+            if (startMenu.style.display === 'flex') {
+                startMenu.style.display = 'none';
+            } else {
+                startMenu.style.display = 'flex';
+            }
+        }
+
+        // Close start menu
+        function closeStartMenu(e) {
+            if (e && e.target !== startButton && !startMenu.contains(e.target)) {
+                startMenu.style.display = 'none';
+            }
+        }
+
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            clock.textContent = timeString;
+        }
+
+        // Show context menu
+        function showContextMenu(x, y) {
+            contextMenu.style.left = `${x}px`;
+            contextMenu.style.top = `${y}px`;
+            contextMenu.style.display = 'block';
+        }
+
+        // Open from context menu
+        function openFromContextMenu() {
+            // Implementation for opening from context menu
+            contextMenu.style.display = 'none';
+        }
+
+        // Rename from context menu
+        function renameFromContextMenu() {
+            // Implementation for renaming from context menu
+            contextMenu.style.display = 'none';
+        }
+
+        // Delete from context menu
+        function deleteFromContextMenu() {
+            // Implementation for deleting from context menu
+            contextMenu.style.display = 'none';
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initDesktop);
+    </script>
+</body>
+</html>
